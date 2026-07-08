@@ -1,0 +1,7 @@
+Django==5.2.16
+psycopg2-binary==2.9.10
+Pillow==11.1.0
+django-silk==5.3.2
+gunicorn==23.0.0
+whitenoise==6.8.2
+dj-database-url==2.2.0

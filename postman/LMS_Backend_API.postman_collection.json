@@ -1,0 +1,194 @@
+{
+  "info": {
+    "name": "LMS Backend API",
+    "description": "Postman Collection untuk pengujian API Simple LMS Backend.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List Courses",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/courses/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "courses",
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "Filter Courses by Keyword",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/courses/?q=django",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "courses",
+            ""
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "django"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Filter Courses by Teacher",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/courses/?teacher=teacher_django",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "courses",
+            ""
+          ],
+          "query": [
+            {
+              "key": "teacher",
+              "value": "teacher_django"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Filter Courses by Price",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/courses/?min_price=50000&max_price=200000",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "courses",
+            ""
+          ],
+          "query": [
+            {
+              "key": "min_price",
+              "value": "50000"
+            },
+            {
+              "key": "max_price",
+              "value": "200000"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Courses Pagination",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/courses/?page=1&per_page=2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "courses",
+            ""
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "per_page",
+              "value": "2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Course Detail",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/courses/1/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "courses",
+            "1",
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "Course Detail Not Found",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/courses/999/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "courses",
+            "999",
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "Rate Limit Test",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/courses/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "courses",
+            ""
+          ]
+        },
+        "description": "Kirim request ini lebih dari 30 kali dalam 60 detik untuk menguji throttling."
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000"
+    }
+  ]
+}

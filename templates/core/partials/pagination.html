@@ -1,0 +1,31 @@
+{% if page_obj.has_other_pages %}
+    <div class="card">
+        <p>
+            Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }}
+            |
+            Total data: {{ page_obj.paginator.count }}
+        </p>
+
+        <p>
+            {% if page_obj.has_previous %}
+                <a class="btn" href="?{% if query_string %}{{ query_string }}&{% endif %}page=1">
+                    First
+                </a>
+
+                <a class="btn" href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.previous_page_number }}">
+                    Previous
+                </a>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+                <a class="btn" href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.next_page_number }}">
+                    Next
+                </a>
+
+                <a class="btn" href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.paginator.num_pages }}">
+                    Last
+                </a>
+            {% endif %}
+        </p>
+    </div>
+{% endif %}

@@ -1,0 +1,62 @@
+{% extends "core/base.html" %}
+
+{% block title %}Statistik Course - LMS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Statistik Course</h2>
+</div>
+
+<div class="grid">
+    <div class="card">
+        <p>Total Course</p>
+        <div class="stat">{{ stats.total_courses|default:0 }}</div>
+    </div>
+
+    <div class="card">
+        <p>Harga Tertinggi</p>
+        <div class="stat">Rp{{ stats.max_price|default:0 }}</div>
+    </div>
+
+    <div class="card">
+        <p>Harga Terendah</p>
+        <div class="stat">Rp{{ stats.min_price|default:0 }}</div>
+    </div>
+
+    <div class="card">
+        <p>Rata-rata Harga</p>
+        <div class="stat">Rp{{ stats.avg_price|floatformat:2|default:0 }}</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Detail Course</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Course</th>
+                <th>Teacher</th>
+                <th>Harga</th>
+                <th>Member</th>
+                <th>Konten</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in courses %}
+                <tr>
+                    <td>{{ course.name }}</td>
+                    <td>{{ course.teacher.username }}</td>
+                    <td>Rp{{ course.price }}</td>
+                    <td>{{ course.total_members }}</td>
+                    <td>{{ course.total_contents }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">Belum ada data course.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

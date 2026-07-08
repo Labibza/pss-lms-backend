@@ -1,0 +1,75 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ course.name }} - LMS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>{{ course.name }}</h2>
+
+    <p>{{ course.description }}</p>
+
+    <p>
+        <strong>Pengajar:</strong> {{ course.teacher.username }} <br>
+        <strong>Harga:</strong> Rp{{ course.price }} <br>
+        <strong>Jumlah Member:</strong> {{ course.total_members }} <br>
+        <strong>Jumlah Konten:</strong> {{ course.total_contents }}
+    </p>
+
+    {% if user.is_authenticated %}
+        {% if can_manage %}
+            <p class="message">
+                Anda adalah pengajar/admin pada course ini.
+            </p>
+        {% elif is_member %}
+            <p class="message">
+                Anda sudah tergabung pada course ini.
+            </p>
+        {% else %}
+            <form action="{% url 'join_course' course.id %}" method="post">
+                {% csrf_token %}
+                <button class="btn btn-success" type="submit">
+                    Join Course
+                </button>
+            </form>
+        {% endif %}
+    {% else %}
+        <p>
+            Silakan <a href="{% url 'login' %}">login</a> untuk join course.
+        </p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h3>Konten Pembelajaran</h3>
+
+    {% if can_view %}
+        {% for content in root_contents %}
+            <div class="content-box">
+                <h4>
+                    <a href="{% url 'course_content_detail' content.id %}">
+                        {{ content.order_number }}. {{ content.title }}
+                    </a>
+                </h4>
+
+                {% if content.children.all %}
+                    <ul>
+                        {% for child in content.children.all %}
+                            <li>
+                                <a href="{% url 'course_content_detail' child.id %}">
+                                    {{ child.order_number }}. {{ child.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>Belum ada konten pada course ini.</p>
+        {% endfor %}
+    {% else %}
+        <p>
+            Konten hanya dapat dilihat oleh admin, pengajar, asisten, atau siswa yang sudah join course.
+        </p>
+    {% endif %}
+</div>
+{% endblock %}

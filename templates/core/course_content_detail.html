@@ -1,0 +1,92 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ content.title }} - LMS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <p>
+        <a href="{% url 'course_detail' course.id %}">
+            ← Kembali ke {{ course.name }}
+        </a>
+    </p>
+
+    <h2>{{ content.title }}</h2>
+
+    <p class="muted">
+        Course: {{ course.name }} |
+        Tipe: {{ content.get_content_type_display }} |
+        Urutan: {{ content.order_number }}
+    </p>
+
+    {% if content.text_content %}
+        <div>
+            {{ content.text_content|linebreaks }}
+        </div>
+    {% endif %}
+
+    {% if content.video_url %}
+        <p>
+            <strong>Video:</strong>
+            <a href="{{ content.video_url }}" target="_blank">
+                {{ content.video_url }}
+            </a>
+        </p>
+    {% endif %}
+
+    {% if content.file %}
+        <p>
+            <strong>File:</strong>
+            <a href="{{ content.file.url }}" target="_blank">
+                Download materi
+            </a>
+        </p>
+    {% endif %}
+
+    {% if can_assist %}
+        <p>
+            <a class="btn" href="{% url 'edit_content' content.id %}">
+                Edit Konten
+            </a>
+        </p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h3>Komentar</h3>
+
+    {% if user.is_authenticated %}
+        <form action="{% url 'add_comment' content.id %}" method="post">
+            {% csrf_token %}
+            {{ comment_form.text.label_tag }}
+            {{ comment_form.text }}
+
+            <button class="btn" type="submit">
+                Kirim Komentar
+            </button>
+        </form>
+    {% else %}
+        <p>
+            Silakan <a href="{% url 'login' %}">login</a> untuk menulis komentar.
+        </p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h3>Daftar Komentar</h3>
+
+    {% for comment in comments %}
+        <div class="content-box">
+            <p>
+                <strong>{{ comment.member.user.username }}</strong>
+                <span class="muted">
+                    sebagai {{ comment.member.get_role_display }}
+                    pada {{ comment.created_at }}
+                </span>
+            </p>
+            <p>{{ comment.text|linebreaks }}</p>
+        </div>
+    {% empty %}
+        <p>Belum ada komentar.</p>
+    {% endfor %}
+</div>
+{% endblock %}

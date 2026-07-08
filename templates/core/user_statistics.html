@@ -1,0 +1,71 @@
+{% extends "core/base.html" %}
+
+{% block title %}Statistik User - LMS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Statistik User</h2>
+</div>
+
+<div class="grid">
+    <div class="card">
+        <p>Total User</p>
+        <div class="stat">{{ total_users }}</div>
+    </div>
+
+    <div class="card">
+        <p>Total Staff</p>
+        <div class="stat">{{ total_staff }}</div>
+    </div>
+
+    <div class="card">
+        <p>Total Non Staff</p>
+        <div class="stat">{{ total_non_staff }}</div>
+    </div>
+
+    <div class="card">
+        <p>User Join Course</p>
+        <div class="stat">{{ total_users_joined_course }}</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Detail User</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Staff</th>
+                <th>Course Diajar</th>
+                <th>Course Diikuti</th>
+                <th>Komentar</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for item in users %}
+                <tr>
+                    <td>{{ item.username }}</td>
+                    <td>{{ item.email|default:"-" }}</td>
+                    <td>
+                        {% if item.is_staff %}
+                            Ya
+                        {% else %}
+                            Tidak
+                        {% endif %}
+                    </td>
+                    <td>{{ item.total_teaching_courses }}</td>
+                    <td>{{ item.total_joined_courses }}</td>
+                    <td>{{ item.total_comments }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">Belum ada user.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

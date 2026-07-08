@@ -1,0 +1,42 @@
+{% extends "core/base.html" %}
+
+{% block title %}Daftar User - LMS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Daftar User</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Staff</th>
+                <th>Course Diajar</th>
+                <th>Course Diikuti</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in users %}
+                <tr>
+                    <td>{{ item.username }}</td>
+                    <td>{{ item.email|default:"-" }}</td>
+                    <td>
+                        {% if item.is_staff %}
+                            Ya
+                        {% else %}
+                            Tidak
+                        {% endif %}
+                    </td>
+                    <td>{{ item.total_teaching_courses }}</td>
+                    <td>{{ item.total_joined_courses }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">Belum ada user.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

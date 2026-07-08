@@ -1,0 +1,66 @@
+{% extends "core/base.html" %}
+
+{% block title %}Dashboard - LMS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Dashboard</h2>
+    <p>Selamat datang, <strong>{{ user.username }}</strong>.</p>
+</div>
+
+<div class="grid">
+    <div class="card">
+        <p>Course Diikuti</p>
+        <div class="stat">{{ total_joined_courses }}</div>
+    </div>
+
+    <div class="card">
+        <p>Course Diajar</p>
+        <div class="stat">{{ total_teaching_courses }}</div>
+    </div>
+
+    <div class="card">
+        <p>Komentar Saya</p>
+        <div class="stat">{{ total_comments }}</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Course Terbaru yang Diikuti</h3>
+
+    {% if joined_courses %}
+        <ul>
+            {% for membership in joined_courses %}
+                <li>
+                    <a href="{% url 'course_detail' membership.course.id %}">
+                        {{ membership.course.name }}
+                    </a>
+                    - {{ membership.get_role_display }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Belum mengikuti course.</p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h3>Komentar Terbaru Saya</h3>
+
+    {% if recent_comments %}
+        <ul>
+            {% for comment in recent_comments %}
+                <li>
+                    "{{ comment.text|truncatechars:80 }}"
+                    pada
+                    <a href="{% url 'course_content_detail' comment.content.id %}">
+                        {{ comment.content.title }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Belum ada komentar.</p>
+    {% endif %}
+</div>
+{% endblock %}

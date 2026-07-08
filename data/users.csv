@@ -1,0 +1,6 @@
+username,email,password,is_staff
+admin_csv,admin_csv@example.com,admin12345,true
+teacher_csv,teacher_csv@example.com,teacher12345,false
+assistant_csv,assistant_csv@example.com,assistant12345,false
+student_csv_1,student_csv_1@example.com,student12345,false
+student_csv_2,student_csv_2@example.com,student12345,false

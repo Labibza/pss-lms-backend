@@ -1,0 +1,90 @@
+{% extends "core/base.html" %}
+
+{% block title %}Import CSV - LMS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Import CSV</h2>
+
+    <p>
+        Halaman ini hanya dapat diakses oleh staff/admin.
+        Gunakan fitur ini untuk mengimport data user, course, dan member secara massal.
+    </p>
+</div>
+
+<div class="card">
+    <h3>Upload File CSV</h3>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label>Tipe Import</label>
+        <select class="form-control" name="import_type" required>
+            <option value="">-- Pilih Tipe Import --</option>
+            <option value="users">User</option>
+            <option value="courses">Course</option>
+            <option value="members">Member</option>
+        </select>
+
+        <label>File CSV</label>
+        <input class="form-control" type="file" name="csv_file" accept=".csv" required>
+
+        <button class="btn" type="submit">
+            Import CSV
+        </button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Format CSV</h3>
+
+    <h4>1. Format User</h4>
+    <pre>username,email,password,is_staff
+admin2,admin2@example.com,admin12345,true
+student3,student3@example.com,student12345,false</pre>
+
+    <h4>2. Format Course</h4>
+    <pre>name,description,price,teacher_username
+Pemrograman Web,Belajar dasar web dengan Django,100000,admin2
+Database Dasar,Belajar database relasional,120000,admin2</pre>
+
+    <h4>3. Format Member</h4>
+    <pre>course_name,username,role
+Pemrograman Web,student3,std
+Pemrograman Web,assistant1,ast</pre>
+
+    <p class="muted">
+        Role member yang valid: <strong>std</strong> untuk siswa dan <strong>ast</strong> untuk asisten.
+    </p>
+</div>
+
+{% if result %}
+<div class="card">
+    <h3>Hasil Import</h3>
+
+    <table>
+        <tr>
+            <th>Created</th>
+            <td>{{ result.created }}</td>
+        </tr>
+        <tr>
+            <th>Updated</th>
+            <td>{{ result.updated }}</td>
+        </tr>
+        <tr>
+            <th>Skipped</th>
+            <td>{{ result.skipped }}</td>
+        </tr>
+    </table>
+
+    {% if result.errors %}
+        <h4>Catatan / Error</h4>
+        <ul>
+            {% for error in result.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

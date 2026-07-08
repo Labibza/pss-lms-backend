@@ -1,0 +1,112 @@
+{% extends "core/base.html" %}
+
+{% block title %}Daftar Course - LMS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Daftar Course</h2>
+
+    <form method="get">
+        <div class="grid">
+            <div>
+                <label>Keyword</label>
+                <input
+                    class="form-control"
+                    type="text"
+                    name="q"
+                    value="{{ filter_values.q }}"
+                    placeholder="Cari nama, deskripsi, atau teacher"
+                >
+            </div>
+
+            <div>
+                <label>Teacher</label>
+                <input
+                    class="form-control"
+                    type="text"
+                    name="teacher"
+                    value="{{ filter_values.teacher }}"
+                    placeholder="Username/email teacher"
+                >
+            </div>
+
+            <div>
+                <label>Harga Minimum</label>
+                <input
+                    class="form-control"
+                    type="number"
+                    name="min_price"
+                    value="{{ filter_values.min_price }}"
+                    placeholder="Contoh: 50000"
+                >
+            </div>
+
+            <div>
+                <label>Harga Maksimum</label>
+                <input
+                    class="form-control"
+                    type="number"
+                    name="max_price"
+                    value="{{ filter_values.max_price }}"
+                    placeholder="Contoh: 200000"
+                >
+            </div>
+
+            <div>
+                <label>Data per Halaman</label>
+                <select class="form-control" name="per_page">
+                    <option value="5" {% if per_page == 5 %}selected{% endif %}>5</option>
+                    <option value="10" {% if per_page == 10 %}selected{% endif %}>10</option>
+                    <option value="20" {% if per_page == 20 %}selected{% endif %}>20</option>
+                    <option value="50" {% if per_page == 50 %}selected{% endif %}>50</option>
+                </select>
+            </div>
+        </div>
+
+        <button class="btn" type="submit">Filter</button>
+        <a class="btn btn-danger" href="{% url 'course_list' %}">Reset</a>
+    </form>
+</div>
+
+<div class="card">
+    <p>
+        Total hasil: <strong>{{ total_filtered }}</strong>
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nama Course</th>
+                <th>Pengajar</th>
+                <th>Harga</th>
+                <th>Member</th>
+                <th>Konten</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for course in courses %}
+                <tr>
+                    <td>{{ course.name }}</td>
+                    <td>{{ course.teacher.username }}</td>
+                    <td>Rp{{ course.price }}</td>
+                    <td>{{ course.total_members }}</td>
+                    <td>{{ course.total_contents }}</td>
+                    <td>
+                        <a class="btn" href="{% url 'course_detail' course.id %}">
+                            Detail
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">Data course tidak ditemukan.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% include "core/partials/pagination.html" %}
+{% endblock %}

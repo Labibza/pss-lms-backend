@@ -1,0 +1,6 @@
+course_name,username,role
+Django CSV Course,student_csv_1,std
+Django CSV Course,assistant_csv,ast
+Python CSV Course,student_csv_1,std
+Python CSV Course,student_csv_2,std
+PostgreSQL CSV Course,student_csv_2,std

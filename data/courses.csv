@@ -1,0 +1,4 @@
+name,description,price,teacher_username
+Django CSV Course,Course hasil import CSV tentang Django,100000,teacher_csv
+Python CSV Course,Course hasil import CSV tentang Python,90000,teacher_csv
+PostgreSQL CSV Course,Course hasil import CSV tentang database PostgreSQL,120000,teacher_csv

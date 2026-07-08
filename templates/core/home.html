@@ -1,0 +1,64 @@
+{% extends "core/base.html" %}
+
+{% block title %}Home - LMS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Home LMS</h2>
+    <p>
+        Aplikasi backend LMS sederhana untuk mengelola course,
+        member, konten pembelajaran, komentar, statistik, API,
+        import CSV, dan monitoring query.
+    </p>
+</div>
+
+<div class="grid">
+    <div class="card">
+        <p>Total Course</p>
+        <div class="stat">{{ total_courses }}</div>
+    </div>
+
+    <div class="card">
+        <p>Total User</p>
+        <div class="stat">{{ total_users }}</div>
+    </div>
+
+    <div class="card">
+        <p>Total Komentar</p>
+        <div class="stat">{{ total_comments }}</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Course Populer</h3>
+
+    {% if popular_courses %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama Course</th>
+                    <th>Pengajar</th>
+                    <th>Jumlah Member</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in popular_courses %}
+                    <tr>
+                        <td>{{ course.name }}</td>
+                        <td>{{ course.teacher.username }}</td>
+                        <td>{{ course.total_members }}</td>
+                        <td>
+                            <a class="btn" href="{% url 'course_detail' course.id %}">
+                                Detail
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Belum ada course.</p>
+    {% endif %}
+</div>
+{% endblock %}

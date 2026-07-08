@@ -1,0 +1,30 @@
+{% extends "core/base.html" %}
+
+{% block title %}Edit Konten - LMS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Edit Konten</h2>
+
+    <p>
+        Course:
+        <a href="{% url 'course_detail' course.id %}">
+            {{ course.name }}
+        </a>
+    </p>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button class="btn" type="submit">
+            Simpan Perubahan
+        </button>
+
+        <a class="btn btn-danger" href="{% url 'course_content_detail' content.id %}">
+            Batal
+        </a>
+    </form>
+</div>
+{% endblock %}
