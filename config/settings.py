@@ -14,9 +14,11 @@ DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = os.environ.get(
     "ALLOWED_HOSTS",
-    "localhost,127.0.0.1,.onrender.com"
+    "localhost,127.0.0.1,.vercel.app"
 ).split(",")
 
+
+ENABLE_SILK = os.environ.get("ENABLE_SILK", "True") == "True"
 
 INSTALLED_APPS = [
     # Django default apps
@@ -27,12 +29,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # Third-party apps
-    "silk",
-
     # Local apps
     "core",
 ]
+
+if ENABLE_SILK:
+    INSTALLED_APPS.insert(6, "silk")
 
 
 MIDDLEWARE = [
@@ -47,10 +49,10 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
 
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-
-    # Django Silk middleware
-    "silk.middleware.SilkyMiddleware",
 ]
+
+if ENABLE_SILK:
+    MIDDLEWARE.append("silk.middleware.SilkyMiddleware")
 
 
 ROOT_URLCONF = "config.urls"
@@ -140,7 +142,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 CSRF_TRUSTED_ORIGINS = os.environ.get(
     "CSRF_TRUSTED_ORIGINS",
-    "http://localhost:8000"
+    "http://localhost:8000,https://*.vercel.app"
 ).split(",")
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
