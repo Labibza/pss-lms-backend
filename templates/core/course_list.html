@@ -1,112 +1,97 @@
 {% extends "core/base.html" %}
-
-{% block title %}Daftar Course - LMS{% endblock %}
+{% block title %}Jelajah Program - NusaBelajar{% endblock %}
 
 {% block content %}
-<div class="card">
-    <h2>Daftar Course</h2>
-
-    <form method="get">
-        <div class="grid">
-            <div>
-                <label>Keyword</label>
-                <input
-                    class="form-control"
-                    type="text"
-                    name="q"
-                    value="{{ filter_values.q }}"
-                    placeholder="Cari nama, deskripsi, atau teacher"
-                >
-            </div>
-
-            <div>
-                <label>Teacher</label>
-                <input
-                    class="form-control"
-                    type="text"
-                    name="teacher"
-                    value="{{ filter_values.teacher }}"
-                    placeholder="Username/email teacher"
-                >
-            </div>
-
-            <div>
-                <label>Harga Minimum</label>
-                <input
-                    class="form-control"
-                    type="number"
-                    name="min_price"
-                    value="{{ filter_values.min_price }}"
-                    placeholder="Contoh: 50000"
-                >
-            </div>
-
-            <div>
-                <label>Harga Maksimum</label>
-                <input
-                    class="form-control"
-                    type="number"
-                    name="max_price"
-                    value="{{ filter_values.max_price }}"
-                    placeholder="Contoh: 200000"
-                >
-            </div>
-
-            <div>
-                <label>Data per Halaman</label>
-                <select class="form-control" name="per_page">
-                    <option value="5" {% if per_page == 5 %}selected{% endif %}>5</option>
-                    <option value="10" {% if per_page == 10 %}selected{% endif %}>10</option>
-                    <option value="20" {% if per_page == 20 %}selected{% endif %}>20</option>
-                    <option value="50" {% if per_page == 50 %}selected{% endif %}>50</option>
-                </select>
-            </div>
+<section class="section">
+    <div class="section-head">
+        <div>
+            <h2>Jelajah Program</h2>
+            <p>Pilih jalur yang paling sesuai dengan minat, ritme belajar, dan target yang ingin kamu capai.</p>
         </div>
+    </div>
 
-        <button class="btn" type="submit">Filter</button>
-        <a class="btn btn-danger" href="{% url 'course_list' %}">Reset</a>
-    </form>
-</div>
+    <div class="panel">
+        <form method="get" class="form-grid">
+            <div class="grid grid-3">
+                <div class="form-row">
+                    <label for="q">Pencarian</label>
+                    <input type="text" id="q" name="q" value="{{ filter_values.q }}" placeholder="Cari topik, bidang, atau nama mentor">
+                </div>
 
-<div class="card">
-    <p>
-        Total hasil: <strong>{{ total_filtered }}</strong>
-    </p>
+                <div class="form-row">
+                    <label for="teacher">Mentor</label>
+                    <input type="text" id="teacher" name="teacher" value="{{ filter_values.teacher }}" placeholder="Cari mentor">
+                </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Nama Course</th>
-                <th>Pengajar</th>
-                <th>Harga</th>
-                <th>Member</th>
-                <th>Konten</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
+                <div class="form-row">
+                    <label for="per_page">Tampilan per halaman</label>
+                    <select id="per_page" name="per_page">
+                        <option value="6" {% if per_page == 6 %}selected{% endif %}>6</option>
+                        <option value="9" {% if per_page == 9 %}selected{% endif %}>9</option>
+                        <option value="12" {% if per_page == 12 %}selected{% endif %}>12</option>
+                        <option value="18" {% if per_page == 18 %}selected{% endif %}>18</option>
+                    </select>
+                </div>
+            </div>
 
-        <tbody>
-            {% for course in courses %}
-                <tr>
-                    <td>{{ course.name }}</td>
-                    <td>{{ course.teacher.username }}</td>
-                    <td>Rp{{ course.price }}</td>
-                    <td>{{ course.total_members }}</td>
-                    <td>{{ course.total_contents }}</td>
-                    <td>
-                        <a class="btn" href="{% url 'course_detail' course.id %}">
-                            Detail
-                        </a>
-                    </td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="6">Data course tidak ditemukan.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+            <div class="grid grid-2">
+                <div class="form-row">
+                    <label for="min_price">Investasi minimum</label>
+                    <input type="number" id="min_price" name="min_price" value="{{ filter_values.min_price }}" placeholder="Contoh 50000">
+                </div>
+
+                <div class="form-row">
+                    <label for="max_price">Investasi maksimum</label>
+                    <input type="number" id="max_price" name="max_price" value="{{ filter_values.max_price }}" placeholder="Contoh 300000">
+                </div>
+            </div>
+
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                <button class="btn btn-primary" type="submit">Terapkan</button>
+                <a class="btn btn-outline" href="{% url 'course_list' %}">Reset</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-head">
+        <div>
+            <h2>Temuan</h2>
+            <p><strong>{{ total_filtered }}</strong> program ditemukan berdasarkan pilihanmu.</p>
+        </div>
+    </div>
+
+    <div class="grid grid-3">
+        {% for course in courses %}
+            <article class="program-card">
+                <div class="program-card-top">
+                    <span class="program-badge">Terstruktur</span>
+                    <h3>{{ course.name }}</h3>
+                    <p>{{ course.description|truncatechars:150 }}</p>
+
+                    <div class="program-meta">
+                        <span class="meta-chip">Mentor: {{ course.teacher.username }}</span>
+                        <span class="meta-chip">{{ course.total_members }} peserta</span>
+                        <span class="meta-chip">{{ course.total_contents }} sesi</span>
+                    </div>
+                </div>
+
+                <div class="program-footer">
+                    <div>
+                        <div class="muted">Investasi belajar</div>
+                        <div class="price">Rp{{ course.price }}</div>
+                    </div>
+                    <a class="btn btn-primary" href="{% url 'course_detail' course.id %}">Lihat Detail</a>
+                </div>
+            </article>
+        {% empty %}
+            <div class="panel">
+                <p>Belum ada hasil yang sesuai. Coba ubah kata kunci atau rentang investasinya.</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>
 
 {% include "core/partials/pagination.html" %}
 {% endblock %}

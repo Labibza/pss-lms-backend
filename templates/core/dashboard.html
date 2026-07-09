@@ -1,66 +1,82 @@
 {% extends "core/base.html" %}
-
-{% block title %}Dashboard - LMS{% endblock %}
+{% block title %}Ringkasan - NusaBelajar{% endblock %}
 
 {% block content %}
-<div class="card">
-    <h2>Dashboard</h2>
-    <p>Selamat datang, <strong>{{ user.username }}</strong>.</p>
-</div>
-
-<div class="grid">
-    <div class="card">
-        <p>Course Diikuti</p>
-        <div class="stat">{{ total_joined_courses }}</div>
+<section class="section">
+    <div class="section-head">
+        <div>
+            <h2>Ringkasan</h2>
+            <p>Selamat datang kembali, <strong>{{ user.username }}</strong>. Lihat progres dan aktivitasmu di satu tempat.</p>
+        </div>
     </div>
 
-    <div class="card">
-        <p>Course Diajar</p>
-        <div class="stat">{{ total_teaching_courses }}</div>
+    <div class="grid grid-3">
+        <div class="metric">
+            <span>Program yang Diikuti</span>
+            <strong>{{ total_joined_courses }}</strong>
+            <small>Jumlah jalur belajar yang sedang kamu tempuh saat ini.</small>
+        </div>
+        <div class="metric">
+            <span>Program yang Dikelola</span>
+            <strong>{{ total_teaching_courses }}</strong>
+            <small>Jumlah jalur yang sedang kamu dampingi atau kelola.</small>
+        </div>
+        <div class="metric">
+            <span>Partisipasi Diskusi</span>
+            <strong>{{ total_comments }}</strong>
+            <small>Aktivitas bertanya, menanggapi, dan berbagi insight.</small>
+        </div>
     </div>
+</section>
 
-    <div class="card">
-        <p>Komentar Saya</p>
-        <div class="stat">{{ total_comments }}</div>
+<section class="section">
+    <div class="grid grid-2">
+        <div class="panel">
+            <div class="section-head" style="margin-bottom:14px;">
+                <div>
+                    <h2 style="font-size:22px;">Program Terbaru</h2>
+                    <p>Jalur belajar yang baru-baru ini kamu ikuti.</p>
+                </div>
+            </div>
+
+            <div class="list-stack">
+                {% for membership in joined_courses %}
+                    <div class="session-item">
+                        <h4>
+                            <a href="{% url 'course_detail' membership.course.id %}">
+                                {{ membership.course.name }}
+                            </a>
+                        </h4>
+                        <p class="muted" style="margin:6px 0 0;">
+                            Peranmu: {{ membership.get_role_display }} · Bergabung pada {{ membership.joined_at }}
+                        </p>
+                    </div>
+                {% empty %}
+                    <p>Belum ada program yang diikuti.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="section-head" style="margin-bottom:14px;">
+                <div>
+                    <h2 style="font-size:22px;">Aktivitas Terbaru</h2>
+                    <p>Jejak interaksi terbaru yang kamu lakukan.</p>
+                </div>
+            </div>
+
+            <div class="list-stack">
+                {% for comment in recent_comments %}
+                    <div class="discussion-item">
+                        <strong>{{ comment.content.title }}</strong>
+                        <div class="muted" style="margin-top:6px;">{{ comment.created_at }}</div>
+                        <p>{{ comment.text|truncatechars:120 }}</p>
+                    </div>
+                {% empty %}
+                    <p>Belum ada aktivitas yang tercatat.</p>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-</div>
-
-<div class="card">
-    <h3>Course Terbaru yang Diikuti</h3>
-
-    {% if joined_courses %}
-        <ul>
-            {% for membership in joined_courses %}
-                <li>
-                    <a href="{% url 'course_detail' membership.course.id %}">
-                        {{ membership.course.name }}
-                    </a>
-                    - {{ membership.get_role_display }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Belum mengikuti course.</p>
-    {% endif %}
-</div>
-
-<div class="card">
-    <h3>Komentar Terbaru Saya</h3>
-
-    {% if recent_comments %}
-        <ul>
-            {% for comment in recent_comments %}
-                <li>
-                    "{{ comment.text|truncatechars:80 }}"
-                    pada
-                    <a href="{% url 'course_content_detail' comment.content.id %}">
-                        {{ comment.content.title }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Belum ada komentar.</p>
-    {% endif %}
-</div>
+</section>
 {% endblock %}

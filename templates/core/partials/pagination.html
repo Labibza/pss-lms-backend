@@ -1,31 +1,22 @@
 {% if page_obj.has_other_pages %}
-    <div class="card">
-        <p>
-            Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }}
-            |
-            Total data: {{ page_obj.paginator.count }}
-        </p>
+<section class="section">
+    <div class="panel" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px;">
+        <div class="muted">
+            Halaman <strong>{{ page_obj.number }}</strong> dari <strong>{{ page_obj.paginator.num_pages }}</strong>
+            · Total <strong>{{ page_obj.paginator.count }}</strong> data
+        </div>
 
-        <p>
+        <div style="display:flex; flex-wrap:wrap; gap:10px;">
             {% if page_obj.has_previous %}
-                <a class="btn" href="?{% if query_string %}{{ query_string }}&{% endif %}page=1">
-                    First
-                </a>
-
-                <a class="btn" href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.previous_page_number }}">
-                    Previous
-                </a>
+                <a class="btn btn-outline" href="?{% if query_string %}{{ query_string }}&{% endif %}page=1">Awal</a>
+                <a class="btn btn-outline" href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.previous_page_number }}">Sebelumnya</a>
             {% endif %}
 
             {% if page_obj.has_next %}
-                <a class="btn" href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.next_page_number }}">
-                    Next
-                </a>
-
-                <a class="btn" href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.paginator.num_pages }}">
-                    Last
-                </a>
+                <a class="btn btn-outline" href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.next_page_number }}">Berikutnya</a>
+                <a class="btn btn-outline" href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.paginator.num_pages }}">Akhir</a>
             {% endif %}
-        </p>
+        </div>
     </div>
+</section>
 {% endif %}

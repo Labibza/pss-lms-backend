@@ -1,64 +1,111 @@
 {% extends "core/base.html" %}
-
-{% block title %}Home - LMS{% endblock %}
+{% block title %}Beranda - NusaBelajar{% endblock %}
 
 {% block content %}
-<div class="card">
-    <h2>Home LMS</h2>
-    <p>
-        Aplikasi backend LMS sederhana untuk mengelola course,
-        member, konten pembelajaran, komentar, statistik, API,
-        import CSV, dan monitoring query.
-    </p>
-</div>
+<section class="hero">
+    <div class="hero-grid">
+        <div>
+            <span class="eyebrow">Platform Belajar Modern</span>
+            <h1>Bangun kemampuan baru lewat pengalaman belajar yang terasa nyata.</h1>
+            <p>
+                Temukan program pilihan, ikuti sesi bertahap, terhubung dengan mentor,
+                dan bangun progresmu sedikit demi sedikit dalam suasana yang rapi, nyaman, dan terarah.
+            </p>
 
-<div class="grid">
-    <div class="card">
-        <p>Total Course</p>
-        <div class="stat">{{ total_courses }}</div>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="{% url 'course_list' %}">Mulai Jelajah</a>
+                {% if user.is_authenticated %}
+                    <a class="btn btn-light" href="{% url 'my_courses' %}">Lihat Perjalanan Saya</a>
+                {% else %}
+                    <a class="btn btn-light" href="{% url 'login' %}">Masuk Sekarang</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="hero-side">
+            <div class="floating-card">
+                <h4>Belajar Bertahap</h4>
+                <p>Materi tersusun rapi dari dasar hingga praktik, sehingga lebih mudah diikuti setiap hari.</p>
+            </div>
+            <div class="floating-card">
+                <h4>Mentor Berpengalaman</h4>
+                <p>Dapatkan arahan dari mentor dan pendamping yang aktif mendampingi proses belajarmu.</p>
+            </div>
+            <div class="floating-card">
+                <h4>Ruang Diskusi Aktif</h4>
+                <p>Bertanya, berbagi insight, dan saling membantu agar proses belajar terasa lebih hidup.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-head">
+        <div>
+            <h2>Gambaran Singkat</h2>
+            <p>Angka-angka ini memberi gambaran seberapa aktif ekosistem belajar di platform ini.</p>
+        </div>
     </div>
 
-    <div class="card">
-        <p>Total User</p>
-        <div class="stat">{{ total_users }}</div>
+    <div class="grid grid-4">
+        <div class="metric">
+            <span>Program Tersedia</span>
+            <strong>{{ total_courses }}</strong>
+            <small>Koleksi program yang bisa dijelajahi sesuai minat dan tujuan belajar.</small>
+        </div>
+        <div class="metric">
+            <span>Komunitas Belajar</span>
+            <strong>{{ total_users }}</strong>
+            <small>Gabungan mentor, pendamping, dan peserta yang aktif bertumbuh bersama.</small>
+        </div>
+        <div class="metric">
+            <span>Interaksi Tercatat</span>
+            <strong>{{ total_comments }}</strong>
+            <small>Jejak tanya-jawab dan diskusi yang membantu proses belajar lebih hidup.</small>
+        </div>
+        <div class="metric">
+            <span>Belajar Fleksibel</span>
+            <strong>24/7</strong>
+            <small>Belajar kapan saja, di mana saja, tanpa harus menunggu kelas tatap muka.</small>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-head">
+        <div>
+            <h2>Pilihan Favorit Minggu Ini</h2>
+            <p>Beberapa program yang paling banyak diminati dan sering menjadi titik awal favorit para peserta.</p>
+        </div>
     </div>
 
-    <div class="card">
-        <p>Total Komentar</p>
-        <div class="stat">{{ total_comments }}</div>
+    <div class="grid grid-3">
+        {% for course in popular_courses %}
+            <article class="program-card">
+                <div class="program-card-top">
+                    <span class="program-badge">Paling Diminati</span>
+                    <h3>{{ course.name }}</h3>
+                    <p>{{ course.description|truncatechars:140 }}</p>
+
+                    <div class="program-meta">
+                        <span class="meta-chip">Mentor: {{ course.teacher.username }}</span>
+                        <span class="meta-chip">{{ course.total_members }} peserta</span>
+                    </div>
+                </div>
+
+                <div class="program-footer">
+                    <div>
+                        <div class="muted">Investasi belajar</div>
+                        <div class="price">Rp{{ course.price }}</div>
+                    </div>
+                    <a class="btn btn-primary" href="{% url 'course_detail' course.id %}">Lihat Detail</a>
+                </div>
+            </article>
+        {% empty %}
+            <div class="panel">
+                <p>Belum ada data untuk ditampilkan saat ini.</p>
+            </div>
+        {% endfor %}
     </div>
-</div>
-
-<div class="card">
-    <h3>Course Populer</h3>
-
-    {% if popular_courses %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Nama Course</th>
-                    <th>Pengajar</th>
-                    <th>Jumlah Member</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for course in popular_courses %}
-                    <tr>
-                        <td>{{ course.name }}</td>
-                        <td>{{ course.teacher.username }}</td>
-                        <td>{{ course.total_members }}</td>
-                        <td>
-                            <a class="btn" href="{% url 'course_detail' course.id %}">
-                                Detail
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>Belum ada course.</p>
-    {% endif %}
-</div>
+</section>
 {% endblock %}

@@ -1,75 +1,93 @@
 {% extends "core/base.html" %}
-
-{% block title %}{{ course.name }} - LMS{% endblock %}
+{% block title %}{{ course.name }} - NusaBelajar{% endblock %}
 
 {% block content %}
-<div class="card">
-    <h2>{{ course.name }}</h2>
+<section class="hero">
+    <div class="hero-grid">
+        <div>
+            <span class="eyebrow">Program Pilihan</span>
+            <h1>{{ course.name }}</h1>
+            <p>{{ course.description }}</p>
 
-    <p>{{ course.description }}</p>
+            <div class="program-meta">
+                <span class="meta-chip">Mentor: {{ course.teacher.username }}</span>
+                <span class="meta-chip">{{ course.total_members }} peserta</span>
+                <span class="meta-chip">{{ course.total_contents }} sesi</span>
+            </div>
 
-    <p>
-        <strong>Pengajar:</strong> {{ course.teacher.username }} <br>
-        <strong>Harga:</strong> Rp{{ course.price }} <br>
-        <strong>Jumlah Member:</strong> {{ course.total_members }} <br>
-        <strong>Jumlah Konten:</strong> {{ course.total_contents }}
-    </p>
-
-    {% if user.is_authenticated %}
-        {% if can_manage %}
-            <p class="message">
-                Anda adalah pengajar/admin pada course ini.
-            </p>
-        {% elif is_member %}
-            <p class="message">
-                Anda sudah tergabung pada course ini.
-            </p>
-        {% else %}
-            <form action="{% url 'join_course' course.id %}" method="post">
-                {% csrf_token %}
-                <button class="btn btn-success" type="submit">
-                    Join Course
-                </button>
-            </form>
-        {% endif %}
-    {% else %}
-        <p>
-            Silakan <a href="{% url 'login' %}">login</a> untuk join course.
-        </p>
-    {% endif %}
-</div>
-
-<div class="card">
-    <h3>Konten Pembelajaran</h3>
-
-    {% if can_view %}
-        {% for content in root_contents %}
-            <div class="content-box">
-                <h4>
-                    <a href="{% url 'course_content_detail' content.id %}">
-                        {{ content.order_number }}. {{ content.title }}
-                    </a>
-                </h4>
-
-                {% if content.children.all %}
-                    <ul>
-                        {% for child in content.children.all %}
-                            <li>
-                                <a href="{% url 'course_content_detail' child.id %}">
-                                    {{ child.order_number }}. {{ child.title }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
+            <div class="hero-actions">
+                {% if user.is_authenticated %}
+                    {% if can_manage %}
+                        <span class="btn btn-light">Kamu adalah pengelola program ini</span>
+                    {% elif is_member %}
+                        <span class="btn btn-light">Kamu sudah bergabung</span>
+                    {% else %}
+                        <form action="{% url 'join_course' course.id %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-primary" type="submit">Ikut Sekarang</button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <a class="btn btn-primary" href="{% url 'login' %}">Masuk untuk Bergabung</a>
                 {% endif %}
             </div>
-        {% empty %}
-            <p>Belum ada konten pada course ini.</p>
-        {% endfor %}
-    {% else %}
-        <p>
-            Konten hanya dapat dilihat oleh admin, pengajar, asisten, atau siswa yang sudah join course.
-        </p>
-    {% endif %}
-</div>
+        </div>
+
+        <div class="hero-side">
+            <div class="floating-card">
+                <h4>Format Bertahap</h4>
+                <p>Belajar selangkah demi selangkah melalui urutan sesi yang jelas dan mudah diikuti.</p>
+            </div>
+            <div class="floating-card">
+                <h4>Proses Terarah</h4>
+                <p>Setiap sesi dirancang agar kamu bisa memahami gambaran besar sekaligus langkah praktiknya.</p>
+            </div>
+            <div class="floating-card">
+                <h4>Diskusi Terbuka</h4>
+                <p>Ajak dirimu untuk aktif bertanya agar pengalaman belajarmu lebih maksimal.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-head">
+        <div>
+            <h2>Rangkaian Sesi</h2>
+            <p>Ikuti alurnya satu per satu agar pemahamanmu semakin utuh dan terstruktur.</p>
+        </div>
+    </div>
+
+    <div class="panel">
+        {% if can_view %}
+            <div class="list-stack">
+                {% for content in root_contents %}
+                    <div class="session-item">
+                        <h4>
+                            <a href="{% url 'course_content_detail' content.id %}">
+                                {{ content.order_number }}. {{ content.title }}
+                            </a>
+                        </h4>
+
+                        {% if content.children.all %}
+                            <ul>
+                                {% for child in content.children.all %}
+                                    <li>
+                                        <a href="{% url 'course_content_detail' child.id %}">
+                                            {{ child.order_number }}. {{ child.title }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <p>Rangkaian sesi belum tersedia saat ini.</p>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Gabung terlebih dahulu agar seluruh sesi bisa dibuka dan diikuti.</p>
+        {% endif %}
+    </div>
+</section>
 {% endblock %}

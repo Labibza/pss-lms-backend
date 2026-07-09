@@ -1,30 +1,25 @@
 {% extends "core/base.html" %}
-
-{% block title %}Edit Konten - LMS{% endblock %}
+{% block title %}Perbarui Materi - NusaBelajar{% endblock %}
 
 {% block content %}
-<div class="card">
-    <h2>Edit Konten</h2>
+<section class="section">
+    <div class="section-head">
+        <div>
+            <h2>Perbarui Materi</h2>
+            <p>Lakukan penyesuaian pada isi, urutan, atau referensi agar pengalaman belajar tetap rapi.</p>
+        </div>
+    </div>
 
-    <p>
-        Course:
-        <a href="{% url 'course_detail' course.id %}">
-            {{ course.name }}
-        </a>
-    </p>
+    <div class="panel">
+        <form method="post" enctype="multipart/form-data" class="form-grid">
+            {% csrf_token %}
+            {{ form.as_p }}
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-
-        {{ form.as_p }}
-
-        <button class="btn" type="submit">
-            Simpan Perubahan
-        </button>
-
-        <a class="btn btn-danger" href="{% url 'course_content_detail' content.id %}">
-            Batal
-        </a>
-    </form>
-</div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                <button class="btn btn-primary" type="submit">Simpan Perubahan</button>
+                <a class="btn btn-danger" href="{% url 'course_content_detail' content.id %}">Batal</a>
+            </div>
+        </form>
+    </div>
+</section>
 {% endblock %}

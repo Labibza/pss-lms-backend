@@ -1,62 +1,51 @@
 {% extends "core/base.html" %}
-
-{% block title %}Statistik Course - LMS{% endblock %}
+{% block title %}Insight Program - NusaBelajar{% endblock %}
 
 {% block content %}
-<div class="card">
-    <h2>Statistik Course</h2>
-</div>
-
-<div class="grid">
-    <div class="card">
-        <p>Total Course</p>
-        <div class="stat">{{ stats.total_courses|default:0 }}</div>
+<section class="section">
+    <div class="section-head">
+        <div>
+            <h2>Insight Program</h2>
+            <p>Ringkasan untuk melihat gambaran umum penawaran belajar yang tersedia saat ini.</p>
+        </div>
     </div>
 
-    <div class="card">
-        <p>Harga Tertinggi</p>
-        <div class="stat">Rp{{ stats.max_price|default:0 }}</div>
+    <div class="grid grid-4">
+        <div class="metric">
+            <span>Total Program</span>
+            <strong>{{ stats.total_courses|default:0 }}</strong>
+            <small>Jumlah keseluruhan jalur belajar yang sudah tersedia.</small>
+        </div>
+        <div class="metric">
+            <span>Investasi Tertinggi</span>
+            <strong>Rp{{ stats.max_price|default:0 }}</strong>
+            <small>Nilai tertinggi pada jalur belajar yang tersedia.</small>
+        </div>
+        <div class="metric">
+            <span>Investasi Terendah</span>
+            <strong>Rp{{ stats.min_price|default:0 }}</strong>
+            <small>Nilai paling terjangkau yang bisa dipilih peserta.</small>
+        </div>
+        <div class="metric">
+            <span>Rata-rata</span>
+            <strong>Rp{{ stats.avg_price|floatformat:0|default:0 }}</strong>
+            <small>Gambaran umum kisaran nilai belajar di platform ini.</small>
+        </div>
     </div>
 
-    <div class="card">
-        <p>Harga Terendah</p>
-        <div class="stat">Rp{{ stats.min_price|default:0 }}</div>
-    </div>
-
-    <div class="card">
-        <p>Rata-rata Harga</p>
-        <div class="stat">Rp{{ stats.avg_price|floatformat:2|default:0 }}</div>
-    </div>
-</div>
-
-<div class="card">
-    <h3>Detail Course</h3>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Course</th>
-                <th>Teacher</th>
-                <th>Harga</th>
-                <th>Member</th>
-                <th>Konten</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="section panel">
+        <div class="list-stack">
             {% for course in courses %}
-                <tr>
-                    <td>{{ course.name }}</td>
-                    <td>{{ course.teacher.username }}</td>
-                    <td>Rp{{ course.price }}</td>
-                    <td>{{ course.total_members }}</td>
-                    <td>{{ course.total_contents }}</td>
-                </tr>
+                <div class="session-item">
+                    <h4>{{ course.name }}</h4>
+                    <p class="muted" style="margin:8px 0 0;">
+                        Mentor: {{ course.teacher.username }} · {{ course.total_members }} peserta · {{ course.total_contents }} sesi · Rp{{ course.price }}
+                    </p>
+                </div>
             {% empty %}
-                <tr>
-                    <td colspan="5">Belum ada data course.</td>
-                </tr>
+                <p>Belum ada data untuk ditampilkan.</p>
             {% endfor %}
-        </tbody>
-    </table>
-</div>
+        </div>
+    </div>
+</section>
 {% endblock %}
